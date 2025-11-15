@@ -15,7 +15,7 @@ uint32_t LeoSynth::beepUntilMs_ = 0;
 
 // ===== Logical pad/control mapping =====
 static const uint8_t PAD_MAP[8]  = {9,8,10,11,5,4,6,7};  // Verified hardware layout
-static const uint8_t CTRL_MAP[4] = {1,0,2,3};            // Top row buttons
+static const uint8_t CTRL_MAP[4] = {0,1,2,3};            // Top row buttons
 
 void LeoSynth::begin() {
   pinMode(USYN_ROW0, OUTPUT); pinMode(USYN_ROW1, OUTPUT); pinMode(USYN_ROW2, OUTPUT);
