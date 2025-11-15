@@ -1,102 +1,81 @@
-\# UnoSynth
-
-
-
-A tiny \*\*Arduino Uno\*\* framework for DIY synth patches.  
-
-\*\*Goal:\*\* separate hardware layout from musical logic, so anyone can write patches without touching pin wiring, matrix scanning, or Charlieplexing.
-
-
-
-\- 12 buttons via 4x3 matrix (7 pins total)
-
-&nbsp; - 8 \*\*keys\*\* + 4 \*\*function\*\* buttons
-
-\- 3-position \*\*page switch\*\* (two inputs, both pull-up)
-
-\- 4 \*\*potentiometers\*\*
-
-\- 4 \*\*LEDs\*\* via \*\*Charlieplexing\*\* (3 pins)
-
-\- \*\*Audio out\*\* on D5 (tone-based) and \*\*CV/audio in\*\* on A5
-
-
-
-> MIT-licensed — go hack, remix, and publish your own patches!
-
-
-
----
-
-
-
-\## Hardware Layout (fixed)
-
-
-
-| Feature            | Pins                   |
-
-|--------------------|------------------------|
-
-| LEDs (Charlieplex) | D2, D3, D4             |
-
-| Audio out          | D5                     |
-
-| Button rows        | D6, D7, D8, D9         |
-
-| Button columns     | D10, D11, D12          |
-
-| 3-pos switch       | D13 (digital), A0 (analog), both INPUT\_PULLUP |
-
-| Pots               | A1, A2, A3, A4         |
-
-| Audio/CV in        | A5                     |
-
-| USB Serial         | D0, D1 (reserved)      |
-
-
-
-Buttons are scanned as a 4x3 matrix (first \*\*8\*\* are \*\*keys\*\*, last \*\*4\*\* are \*\*function\*\* buttons).
-
-
-
----
-
-
-
-\## API (what patches use)
-
-
-
-```cpp
-
-\#include <UnoSynth.h>
-
-
-
-UnoSynth.begin();         // call in setup()
-
-UnoSynth.update();        // call each loop()
-
-
-
-bool UnoSynth::getKey(uint8\_t i);   // i = 0..7
-
-bool UnoSynth::getFn(uint8\_t i);    // i = 0..3
-
-int  UnoSynth::getPot(uint8\_t i);   // i = 0..3, returns 0..1023
-
-int  UnoSynth::getPage();           // 0..2 (page switch)
-
-
-
-void UnoSynth::setLED(uint8\_t id, bool on); // id = 0..3
-
-
-
-void UnoSynth::playFreq(uint16\_t hz); // tone() on D5
-
-void UnoSynth::stopAudio();
-
-
-
+# LeoSynth
+DIY sound synthesis framework.
+
+LeoSynth is an open-source Arduino-based synthesiser platform. It is designed to learn sound synthesis by building real hardware and writing simple synth code. No black boxes, no expensive gear, just pure exploration.
+
+```
+LeoSynth
+├── Hardware    – build your own LeoSynth with simple components
+├── Library     – LeoSynth Hardware Abstraction Layer/API to control the hardware
+└── Sketches    – Several engines for sound synthesis/midi control, feel free to contribute with your own!
+```
+
+## Overview
+LeoSynth gives you:
+- A fixed reproducible open hardware layout anyone can build
+- A lean Arduino library that handles all hardware I/O
+- Example synth sketches that focus only on sound logic
+
+The hardware design is fixed. No pin changes, no wiring surprises and no dependency hell. Everything is simple, clear and hackable.
+
+## Hardware
+The standard LeoSynth board includes:
+- 12-button matrix
+- 3-way mode switch
+- 4 analogue potentiometers
+- 3 Charlieplexed LEDs
+- Audio output (PWM/tone-based to start)
+- Analog input (which can also be used for digital input)
+- Arduino Leonardo as the synth engine
+
+Full hardware documentation will be available in this repository.
+
+## Library
+The LeoSynth Arduino library handles:
+- Button matrix scanning
+- Switch input
+- Analogue pot reading with smoothing
+- Charlieplex LED routing
+- Audio output helper
+- Stable update cycle per loop
+
+You write sound logic only. LeoSynth handles the rest.
+
+Example:
+
+```
+#include <LeoSynth.h>
+
+void setup() {
+  LeoSynth::begin();
+}
+
+void loop() {
+  LeoSynth::update();
+  if (LeoSynth::buttonEdge(0)) {
+    LeoSynth::beep(440, 120);
+  }
+}
+```
+
+## Examples
+The examples folder contains synth sketches built using the LeoSynth API. Each sketch is a standalone sound engine, from simple beeps to evolving textures. Community sketches will be added over time.
+
+## Install
+1. Download or clone this repository
+2. Place the LeoSynth folder inside your Arduino libraries directory
+3. Restart Arduino IDE
+4. Go to File > Examples > LeoSynth to load the example sketch
+
+## Roadmap
+- Hardware assembly guide
+- Multiple synthesis engines
+- Envelope and modulation tools
+- Audio tables and noise generators
+- Community sound library
+
+## Project Link
+https://github.com/raimun2/LeoSynth
+
+## License
+Public domain. See LICENSE.
